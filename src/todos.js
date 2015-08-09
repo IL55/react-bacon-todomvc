@@ -14,11 +14,17 @@ module.exports = {
       [d.stream('addState')],         addItemState,
       [d.stream('removeState')],      removeItemState,
       [d.stream('removeCompleted')],  removeCompleteItems,
-      [d.stream('updateTitle')],      updateItemTitle
+      [d.stream('updateTitle')],      updateItemTitle,
+      [d.stream('clone')],            cloneItem
     )
 
     return Bacon.combineAsArray([itemsS, filterS]).map(withDisplayStatus)
 
+
+    function cloneItem(items, itemId) {
+      var newItem = R.merge(R.clone(R.find(R.propEq('id', itemId)))(items), {id: 1000});
+      return items.concat([newItem]);
+    }
 
     function createItem(items, newItemTitle) {
       return items.concat([{id: Date.now(), title: newItemTitle, states: []}])
@@ -61,6 +67,10 @@ module.exports = {
 
   createItem: function(title) {
     d.push('create', title)
+  },
+
+  cloneItem: function(itemId) {
+    d.push('clone', itemId)
   },
 
   removeItem: function(itemId) {

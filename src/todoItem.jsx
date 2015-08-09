@@ -48,6 +48,7 @@ module.exports = React.createClass({
             {item.title}
           </label>
           <button className="destroy" onClick={() => todos.removeItem(item.id)}/>
+          <button onClick={() => todos.cloneItem(item.id)}>Clone</button>
         </div>
         <input
           ref="editField"
